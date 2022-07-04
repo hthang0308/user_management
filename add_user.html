@@ -1,0 +1,78 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button
+        type="button"
+        class="navbar-toggle collapsed"
+        data-toggle="collapse"
+        data-target="#bs-example-navbar-collapse-1"
+        aria-expanded="false"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/#/">HOME</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/#/">ALL USERS <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="active">
+          <a href="/#/add">ADD USER</a>
+        </li>
+        <li>
+          <a href="/#/login">LOGIN</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div style="clear: both"></div>
+<div class="panel panel-default" style="width: 300px; float: left; margin-left: 10px">
+  <form name="new_employee_form">
+    <div class="panel-heading">Add New Employee</div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" id="username" name="username" ng-model="new_employee.username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" name="password" ng-model="new_employee.password" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email" ng-model="new_employee.email" />
+        <small ng-show="new_employee_form.email.$error.email" class="text-danger">Invalid email address</small>
+      </div>
+      <div class="form-group">
+        <label for="city">City:</label>
+        <select class="form-control" id="city" name="city" ng-model="new_employee.city">
+          <option value="">Please select</option>
+          <option value="Ha Noi">Ha Noi</option>
+          <option value="Ho Chi Minh">Ho Chi Minh</option>
+          <option value="Da Nang">Da Nang</option>
+          <option value="Hai Phong">Hai Phong</option>
+          <option value="Nha Trang">Nha Trang</option>
+          <option value="Vung Tau">Vung Tau</option>
+          <option value="Quang Nam">Quang Nam</option>
+          <option value="Quang Ngai">Quang Ngai</option>
+          <option value="Quang Binh">Quang Binh</option>
+          <option value="Quang Tri">Quang Tri</option>
+          <option value="Binh Thuan">Binh Thuan</option>
+          <option value="Gia Lai">Gia Lai</option>
+          <option value="Khanh Hoa">Khanh Hoa</option>
+        </select>
+      </div>
+      <div class="alert alert-danger" ng-show="error">{{error}}</div>
+      <div class="alert alert-success" ng-show="success">{{success}}</div>
+      <button type="button" class="btn btn-primary" ng-click="add_employee(new_employee)">Add Employee</button>
+    </div>
+  </form>
+</div>

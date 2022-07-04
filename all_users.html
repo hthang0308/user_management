@@ -1,0 +1,132 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button
+        type="button"
+        class="navbar-toggle collapsed"
+        data-toggle="collapse"
+        data-target="#bs-example-navbar-collapse-1"
+        aria-expanded="false"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/#/">HOME</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active">
+          <a href="/#/">ALL USERS <span class="sr-only">(current)</span></a>
+        </li>
+        <li>
+          <a href="/#/add">ADD USER</a>
+        </li>
+        <li>
+          <a href="/#/login">LOGIN</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<form class="navbar-form navbar-left">
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search" ng-model="search_term" />
+  </div>
+</form>
+<div style="clear: both"></div>
+<div
+  class="panel panel-primary"
+  ng-repeat="employee in employees| filter:search_term"
+  style="width: 300px; float: left; margin-left: 10px"
+>
+  <div class="panel-heading">{{employee.username}}</div>
+  <div class="panel-body">
+    <p><strong>Email:</strong> {{employee.email}}</p>
+    <p><strong>City:</strong> {{employee.city}}</p>
+  </div>
+  <div class="panel-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-toggle="modal"
+      data-target="#myModal"
+      ng-click="select_employee(employee)"
+    >
+      Edit
+    </button>
+    <button class="btn btn-danger" ng-click="delete_employee(employee)">Delete</button>
+  </div>
+</div>
+
+<!-- The modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="modalLabel">Edit this User</h4>
+      </div>
+      <div class="modal-body">
+        <form name="edit_employee_form">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              readonly
+              ng-model="employee_editing.username"
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" ng-model="employee_editing.email" />
+            <small ng-show="edit_employee_form.email.$error.email" class="text-danger">
+              Not a valid email address
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="city">City:</label>
+            <select class="form-control" id="city" name="city" ng-model="employee_editing.city">
+              <option value="Ha Noi">Ha Noi</option>
+              <option value="Ho Chi Minh">Ho Chi Minh</option>
+              <option value="Da Nang">Da Nang</option>
+              <option value="Hai Phong">Hai Phong</option>
+              <option value="Nha Trang">Nha Trang</option>
+              <option value="Vung Tau">Vung Tau</option>
+              <option value="Quang Nam">Quang Nam</option>
+              <option value="Quang Ngai">Quang Ngai</option>
+              <option value="Quang Binh">Quang Binh</option>
+              <option value="Quang Tri">Quang Tri</option>
+              <option value="Binh Thuan">Binh Thuan</option>
+              <option value="Gia Lai">Gia Lai</option>
+              <option value="Khanh Hoa">Khanh Hoa</option>
+            </select>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            ng-click="edit_employee(employee_editing)"
+            ng-disabled="edit_employee_form.$invalid"
+          >
+            Confirm
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--message output-->
+<div class="alert alert-success" ng-show="message">{{message}}</div>
