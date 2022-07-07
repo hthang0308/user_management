@@ -16,6 +16,10 @@
         <small ng-show="new_employee_form.email.$error.email" class="text-danger">Invalid email address</small>
       </div>
       <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="text" class="form-control" id="phone" name="phone" ng-model="new_employee.phone" />
+      </div>
+      <div class="form-group">
         <label for="city">City:</label>
         <select class="form-control" id="city" name="city" ng-model="new_employee.city">
           <option value="">Please select</option>

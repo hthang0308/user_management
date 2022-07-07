@@ -15,7 +15,7 @@
         $routeProvider
           .when("/", {
             controller: "myController",
-            templateUrl: "all_users.html",
+            templateUrl: "all_users_2.html",
           })
           .when("/add", {
             controller: "addController",
@@ -25,6 +25,10 @@
             controller: "loginController",
             templateUrl: "login.html",
           })
+          .when("/myinfo", {
+            controller: "myInfoController",
+            templateUrl: "myinfo.html",
+          })
           .otherwise({
             redirectTo: "/",
           });
@@ -32,10 +36,38 @@
       myApp.config(function ($httpProvider) {
         $httpProvider.defaults.withCredentials = true;
       });
+      function hasAccess(stateName) {
+        allStateNames = stateName.split(",");
+        var hasAccess = false;
+        if (localStorage.getItem("token")) {
+          $user = JSON.parse(localStorage.getItem("user"));
+          if (allStateNames.indexOf($user.role) > -1) {
+            hasAccess = true;
+          }
+        } else if (allStateNames.indexOf("guest") > -1) {
+          hasAccess = true;
+        }
+        return hasAccess;
+      }
+      myApp.directive("checkPermissions", function () {
+        return {
+          restrict: "A",
+          link: function (scope, elem, attrs, ctrl) {
+            if (attrs.permissions != "") {
+              var hasPermission = hasAccess(attrs.checkPermissions);
+
+              if (false == hasPermission) {
+                elem.remove();
+              }
+            } else {
+              elem.remove();
+            }
+          },
+        };
+      });
       myApp.controller("myController", function ($rootScope, $scope, $http) {
         $scope.query = {};
         $scope.orderProp = "name";
-        $rootScope.token = localStorage.getItem("token");
         if (localStorage.getItem("token")) {
           $http
             .get("http://localhost/codeigniter/api/user", {
@@ -82,6 +114,7 @@
         };
         $scope.logout = function ($rootScope) {
           localStorage.removeItem("token");
+          localStorage.removeItem("user");
           location.reload();
         };
       });
@@ -115,7 +148,10 @@
             .success(function (data) {
               if (data.status == "success") {
                 localStorage.setItem("token", data.token);
-                $location.url("/");
+                localStorage.setItem("user", JSON.stringify(data.user));
+                //redirect to home page, then refresh page
+                $location.path("/myinfo");
+                //refresh
               } else if (data.status == "error") {
                 $scope.error = data.message;
               } else console.log(data);
@@ -123,6 +159,22 @@
             .error(function (data, status) {
               alert("Error");
             });
+        };
+      });
+      myApp.controller("myInfoController", function ($scope, $http) {
+        if (localStorage.getItem("user")) {
+          $scope.user = JSON.parse(localStorage.getItem("user"));
+        }
+        //function updateUser
+        $scope.updateUser = function (user) {
+          $http.put("http://localhost/codeigniter/api/user/" + user.id + "/", user).success(function (data) {
+            if (data.status == "success") {
+              localStorage.setItem("user", JSON.stringify(user));
+              alert(data.message);
+            } else if (data.status == "error") {
+              alert(data.message);
+            } else console.log("Something went wrong");
+          });
         };
       });
     </script>
